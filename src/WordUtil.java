@@ -5,8 +5,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public interface WordUtil {
-    ArrayList < String > words = new ArrayList < > ();
+    ArrayList<String> words = new ArrayList<>();
     static Random rand = new Random();
+
     public static void setup() throws FileNotFoundException {
         File file = new File("src/words.txt");
         Scanner scan = new Scanner(file);
@@ -14,6 +15,10 @@ public interface WordUtil {
             words.add(scan.nextLine());
         }
         scan.close();
+    }
+
+    public static boolean checkString(String toCheck) {
+        return words.contains(toCheck.toLowerCase());
     }
 
     public static String random() {

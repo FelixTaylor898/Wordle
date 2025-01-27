@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import javax.swing.JPanel;
  * @author Felix Taylor
  * @version 9/12/23
  * 
- * Wordle game frame.
+ *          Wordle game frame.
  */
 public class Game {
 
@@ -28,9 +29,11 @@ public class Game {
     static int column = 0;
     static boolean stop;
     static Tile[][] tiles = new Tile[6][5];
+
     public Game() {
         stop = false;
-        if (frame != null) frame.dispose();
+        if (frame != null)
+            frame.dispose();
         frame = new JFrame("Wordle");
         JButton b = new JButton("Restart");
         b.setBackground(Color.WHITE);
@@ -69,8 +72,8 @@ public class Game {
 
     /**
      * @param letter - letter typed by the user
-     * If the game isn't stopped and the row isn't
-     * full, show the letter on the grid.
+     *               If the game isn't stopped and the row isn't
+     *               full, show the letter on the grid.
      */
     public static void type(String letter) {
         if (!stop && column < 5) {
@@ -100,10 +103,23 @@ public class Game {
      * row, lose the game.
      */
     public static void enter() {
-        if (stop) return;
-        Map < String, Integer > map = new HashMap < > ();
+        if (stop)
+            return;
+        Map<String, Integer> map = new HashMap<>();
         int green = 0;
         if (column == 5) {
+
+            StringBuilder enteredWord = new StringBuilder();
+            for (int k = 0; k < 5; k++) {
+                enteredWord.append(tiles[row][k].getLetter());
+            }
+
+            // Validate the entered word
+            if (!WordUtil.checkString(enteredWord.toString())) {
+                JOptionPane.showMessageDialog(null, "Invalid word! Try again.");
+                return;
+            }
+
             for (int k = 0; k < 5; k++) {
                 if (letters[k].equals(tiles[row][k].getLetter())) {
                     tiles[row][k].setColor(Color.green);
@@ -114,7 +130,8 @@ public class Game {
                 }
             }
             for (int k = 0; k < 5; k++) {
-                if (tiles[row][k].getColor().equals(Color.green)) continue;
+                if (tiles[row][k].getColor().equals(Color.green))
+                    continue;
                 if (map.containsKey(tiles[row][k].getLetter()) && map.get(tiles[row][k].getLetter()) > 0) {
                     tiles[row][k].setColor(Color.yellow);
                     map.put(tiles[row][k].getLetter(), map.get(tiles[row][k].getLetter()) - 1);
